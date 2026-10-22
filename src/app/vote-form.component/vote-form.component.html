@@ -1,0 +1,46 @@
+<div class="mt-5">
+  <h2>Vote!</h2>
+  <div class="d-flex align-items-end gap-4">
+    <!-- Voter Selection Dropdown -->
+    <div class="flex-grow-1">
+      <label class="form-label">I am</label>
+      <select class="form-select" [(ngModel)]="selectedVoter" required>
+        <option [ngValue]="null" disabled selected hidden></option>
+
+        @for (voter of voters(); track voter.id) {
+          <option 
+            [value]="voter.id" 
+            [disabled]="voter.hasVoted">
+            {{ voter.name }}
+          </option>
+        } @empty {
+          <option disabled>No voters available</option>
+        }
+      </select>
+    </div>
+
+    <!-- Candidate Selection Dropdown -->
+    <div class="flex-grow-1">
+      <label class="form-label">I vote for</label>
+      <select class="form-select" [(ngModel)]="selectedCandidate" required>
+        <option [ngValue]="null" disabled selected hidden></option>
+
+        @for (candidate of candidates(); track candidate.id) {
+          <option [value]="candidate.id">
+            {{ candidate.name }}
+          </option>
+        } @empty {
+          <option disabled>No candidates available</option>
+        }
+      </select>
+    </div>
+
+    <!-- Submit Button -->
+    <button 
+      class="btn btn-secondary px-4" 
+      (click)="submit()"
+      [disabled]="selectedVoter === null || selectedCandidate === null">
+      Submit
+    </button>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<table class="table table-bordered table-hover">
+  <thead class="table-light">
+    <tr>
+  <th colspan="2">
+        Candidates 
+        <a 
+          routerLink="/candidates" 
+          routerLinkActive="active" 
+          class="btn btn-sm btn-outline-primary ms-2"
+          aria-label="Add new candidate">
+          +
+        </a>
+  </th>
+</tr>
+<tr>
+      <th>Name</th>
+      <th>votes</th>
+</tr>
+</thead>
+<tbody>
+  @for (candidate of candidates(); track candidate.id) {
+    <tr>
+      <td>{{ candidate.name }}</td>
+      <td class="text-center">{{ candidate.voteCount }}</td>
+    </tr>
+  } @empty {
+    <tr>
+      <td colspan="2" class="text-center text-muted">No candidates available</td>
+    </tr>
+  }
+
+  @if (loading()) {
+    <tr>
+      <td colspan="2" class="text-center">Loading candidates...</td>
+    </tr>
+  }
+
+  @if (error() && !loading()) {
+    <tr>
+      <td colspan="2" class="text-center text-danger">{{ error() }}</td>
+    </tr>
+  }
+</tbody>
+</table>

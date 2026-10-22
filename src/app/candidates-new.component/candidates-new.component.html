@@ -1,0 +1,92 @@
+<!-- src/app/components/candidate-management.component.html (or candidate-new.component.html) -->
+<div class="container mt-5">
+  <h2 class="mb-4">Candidate Management</h2>
+
+  <!-- Add/Edit Form (Always Visible at Top) -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">
+        {{ editingId === null ? 'Add New Candidate' : 'Edit Candidate (ID: ' + editingId + ')' }}
+      </h5>
+      <form (ngSubmit)="submitForm()" class="row g-3 align-items-end">
+        <div class="col-md-8">
+          <label class="form-label">Candidate Name</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="formName" 
+            placeholder="Enter name" 
+            required 
+            [disabled]="isSubmitting">
+        </div>
+        <div class="col-md-4">
+          <button 
+            type="submit" 
+            class="btn btn-primary me-2" 
+            [disabled]="!formName.trim() || isSubmitting">
+            {{ editingId === null ? 'Add Candidate' : 'Update Candidate' }}
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            (click)="cancelEdit()" 
+            *ngIf="editingId !== null">
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      @if (error()) {
+        <div class="alert alert-danger mt-3">
+          {{ error() }}
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Candidates List Table -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span>Candidates List</span>
+    </div>
+    <div class="card-body">
+      @if (loading()) {
+        <p class="text-center">Loading candidates...</p>
+      } @else {
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Name</th>
+              <th class="text-center">Votes</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (candidate of candidates(); track candidate.id) {
+              <tr>
+                <td>{{ candidate.name }}</td>
+                <td class="text-center">{{ candidate.voteCount }}</td>
+                <td class="text-center">
+                  <button 
+                    class="btn btn-sm btn-outline-primary me-2" 
+                    (click)="editCandidate(candidate)">
+                    Edit
+                  </button>
+                  <button 
+                    class="btn btn-sm btn-outline-danger" 
+                    (click)="deleteCandidate(candidate.id)">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="3" class="text-center text-muted">No candidates available</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  </div>
+</div>
